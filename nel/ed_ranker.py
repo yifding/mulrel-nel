@@ -334,8 +334,14 @@ class EDRanker:
                 dev_f1 = 0
                 for di, (dname, data) in enumerate(dev_datasets):
                     predictions = self.predict(data)
+
+                    # **YD** change output of D.eval to include prec, rec and f1
+                    """
                     f1 = D.eval(org_dev_datasets[di][1], predictions)
                     print(dname, utils.tokgreen('micro F1: ' + str(f1)))
+                    """
+                    f1, out_s = D.eval(org_dev_datasets[di][1], predictions)
+                    print(dname, utils.tokgreen(out_s))
 
                     if dname == 'aida-A':
                         dev_f1 = f1

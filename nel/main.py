@@ -149,7 +149,12 @@ if __name__ == "__main__":
                     ('aquaint', conll.aquaint),
                     ('ace2004', conll.ace2004),
                     ('clueweb', conll.clueweb),
-                    ('wikipedia', conll.wikipedia)
+                    ('wikipedia', conll.wikipedia),
+
+                    # **YD** add reddit data
+                    ('reddit2020gold', conll.reddit2020gold),
+                    ('reddit2020silver', conll.reddit2020silver),
+                    ('reddit2020g_s', conll.reddit2020g_s),
                     ]
 
     if args.mode == 'train':
@@ -170,4 +175,10 @@ if __name__ == "__main__":
         for di, (dname, data) in enumerate(dev_datasets):
             ranker.model._coh_ctx_vecs = []
             predictions = ranker.predict(data)
+
+            # **YD** change output of D.eval to include prec, rec and f1
+            """
             print(dname, utils.tokgreen('micro F1: ' + str(D.eval(org_dev_datasets[di][1], predictions))))
+            """
+            f1, out_s = D.eval(data, predictions)
+            print(dname, utils.tokgreen(out_s))

@@ -200,7 +200,11 @@ def eval(testset, system_pred):
     precision = true_pos / len([p for p in pred if p != 'NIL'])
     recall = true_pos / len(gold)
     f1 = 2 * precision * recall / (precision + recall)
-    return f1
+
+    # **YD** report precision, recall and f1 as an extra string in the end.
+    out_s = 'pre: ' + '{}'.format(precision) + ' rec: ' + '{}'.format(recall) + ' f1: ' + '{}'.format(f1)
+
+    return f1, out_s
 
 
 class CoNLLDataset:
@@ -219,6 +223,11 @@ class CoNLLDataset:
         self.msnbc = read_csv_file(path + '/wned-msnbc.csv')
         self.wikipedia = read_csv_file(path + '/wned-wikipedia.csv')
         self.wikipedia.pop('Jiří_Třanovský Jiří_Třanovský', None)
+
+        # **YD** add reddit data
+        self.reddit2020gold = read_csv_file(path + '/wned-reddit2020gold.csv')
+        self.reddit2020silver= read_csv_file(path + '/wned-reddit2020silver.csv')
+        self.reddit2020g_s = read_csv_file(path + '/wned-reddit2020g_s.csv')
 
         print('process coref')
         person_names = load_person_names(person_path)
@@ -240,6 +249,11 @@ class CoNLLDataset:
         read_conll_file(self.msnbc, conll_path + '/wned-datasets/msnbc/msnbc.conll')
         read_conll_file(self.clueweb, conll_path + '/wned-datasets/clueweb/clueweb.conll')
         read_conll_file(self.wikipedia, conll_path + '/wned-datasets/wikipedia/wikipedia.conll')
+
+        # **YD** ignore conll file for reddit data
+        # read_conll_file(self.reddit2020gold, conll_path + '/wned-datasets/reddit2020gold/reddit2020gold.conll')
+        # read_conll_file(self.reddit2020silver, conll_path + '/wned-datasets/reddit2020silver/reddit2020silver.conll')
+        # read_conll_file(self.reddit2020g_s, conll_path + '/wned-datasets/reddit2020g_s/reddit2020g_s.conll')
 
 
 if __name__ == "__main__":
